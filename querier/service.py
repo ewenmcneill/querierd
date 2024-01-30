@@ -5,6 +5,8 @@
 # Based on the work of Mark Culler and others.
 # This file is part of QuerierD.
 #
+# Ported to Python 3 by Ewen McNeill <ewen@naos.co.nz>, 2024-01-30
+#
 # QuerierD is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 2 of the License, or
@@ -61,7 +63,7 @@ def main():
     args = parser.parse_args()
 
     if os.getuid() != 0:
-        print 'You must be root to run a querier.'
+        print('You must be root to run a querier.')
         sys.exit(1)
 
     debug = args.debug
