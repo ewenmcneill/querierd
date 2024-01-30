@@ -38,14 +38,22 @@ class Packet(object):
     """
     Base class for internet packets.
     """
-    _data = ''
+    _data = b''
     def __init__(self):
         self.format = '!'+''.join([self.formats[f]
                                    for f in self.fields])
         self.length = self.hdr_length = struct.calcsize(self.format)
         self.length = LENGTH(self.length)
 
+    # In Python 3 the packet is in bytes, so we cannot use str() / __str__
+    # and there is no dunder method for returning bytes; instead we simply
+    # call self.encode(), and rely on encode() being a commonly implemented
+    # method for other likely data types.
+    #
     def __str__(self):
+        raise TypeError("Packet data is in bytes, cannot convert to str")
+
+    def encode(self, *args, **kwargs):
         self.compute_checksum()
         return self.header() + self._data
 
@@ -68,7 +76,7 @@ class Packet(object):
         return self._data
     @data.setter
     def data(self, data):
-        self._data = str(data)
+        self._data = data.encode()
         self.length = LENGTH(self.hdr_length + len(self._data))
         
 class IGMPv2Packet(Packet):
